@@ -9,36 +9,42 @@ namespace MyProductAPI.Controllers
     [ApiController]
     public class ProductController : ControllerBase
     {
+        #region -- initialize Products --
         private static readonly List<Product> Products = new List<Product>
         {
             new Product{Id=1,Name="Black Jeans",Price=529.75m},
             new Product{Id=2,Name="White Polo Shirt",Price=255.50m},
             new Product{Id=3,Name="Air Jordan Shoes",Price=152.25m}
         };
+        #endregion
 
-
-
+        #region -- GET: api/products --
         // GET: api/products
         [HttpGet]
         public async Task<IActionResult> GetAllProducts()
         {
             return await Task.FromResult(Ok(Products));
         }
+        #endregion
 
+        #region --  GET: api/products/{id} --
         // GET: api/products/{id}
         [HttpGet("{id:int}")]
         public async Task<IActionResult> GetProductByID(int id)
         {
-            var product = Products.FirstOrDefault(p => p.Id == id);
+            //var product = Products.FirstOrDefault(p => p.Id == id);
+             var productwithID = Products.Find(product => product.Id == id);
 
-            if (product == null)
+            if (productwithID == null)
             {
                 return await Task.FromResult(NotFound(new { Message = $"Product with ID {id} not found!" }));
 
             }
-            return await Task.FromResult(Ok(product));
+            return await Task.FromResult(Ok(productwithID));
         }
+        #endregion
 
+        #region -- POST: api/products --
         // POST: api/products
         [HttpPost]
         public async Task<ActionResult<Product>> AddNewProduct([FromBody] Product newProduct)
@@ -57,5 +63,6 @@ namespace MyProductAPI.Controllers
 
             return await Task.FromResult(CreatedAtAction(nameof(GetProductByID), new { id = newProduct.Id }, newProduct));
         }
+        #endregion
     }
 }
