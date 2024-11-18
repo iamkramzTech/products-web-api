@@ -13,10 +13,10 @@ namespace MyProductAPI
 
             builder.Services.AddCors(options =>
             {
-                options.AddPolicy("corsapp", policy =>
-                {
-                    policy.WithOrigins("*").AllowAnyMethod().AllowAnyHeader();
-                });
+                options.AddPolicy("AllowReactNative",
+                    policy => policy.AllowAnyOrigin()
+                                    .AllowAnyMethod()
+                                    .AllowAnyHeader());
             });
 
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -25,7 +25,7 @@ namespace MyProductAPI
 
             var app = builder.Build();
 
-            app.UseCors("corsapp");
+           // app.UseCors("AllowAllHeaders");
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
@@ -34,10 +34,17 @@ namespace MyProductAPI
                 app.UseSwaggerUI();
             }
 
+            //app.UseCors(options =>
+            //{
+            //    options
+            //    .AllowAnyOrigin()
+            //    .AllowAnyMethod()
+            //    .AllowAnyHeader();
+            //});
+            app.UseCors("AllowReactNative");
             app.UseHttpsRedirection();
 
             app.UseAuthorization();
-
 
             app.MapControllers();
 
